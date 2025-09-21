@@ -1,5 +1,16 @@
-## Test Websocket 
+## CLI
 
+```
+Usage: server [OPTIONS]
+
+Options:
+  -a, --address <ADDRESS>              [default: 0.0.0.0:4444]
+      --tls-cert-path <TLS_CERT_PATH>  [default: ./crt/cert.pem]
+      --tls-key-path <TLS_KEY_PATH>    [default: ./crt/key.pem]
+  -d, --disable-tls                    
+  -h, --help                           Print help
+  -V, --version                        Print version
+```   
 
 ## Test API
 curl -v \
