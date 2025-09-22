@@ -161,9 +161,7 @@ func sendToServer(ad *fido.FidoAdvertisement) error {
 		return err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	if username != "" {
-		req.SetBasicAuth(username, password)
-	}
+	req.SetBasicAuth(username, password)
 
 	client := http.Client{
 		Timeout: 30 * time.Second,
@@ -173,8 +171,9 @@ func sendToServer(ad *fido.FidoAdvertisement) error {
 	if err != nil {
 		return err
 	}
-	if res.StatusCode != http.StatusOK {
-		errors.New("FidoAdvertisements could not be sent to the server! Received StatusCode:" + strconv.Itoa(res.StatusCode))
+	if res.StatusCode != http.StatusCreated {
+		return errors.New("FidoAdvertisements could not be sent to the server! Received StatusCode:" + strconv.Itoa(res.StatusCode))
 	}
+	slog.Info("FidoAdvertisements successfully sent to the server")
 	return nil
 }

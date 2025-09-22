@@ -15,6 +15,10 @@ Add following entries to `/etc/hosts`:
 ### RootCA & TLS certs
 Before you start you need to generate fresh certs!
 
+Make sure that you have openssl installed
+
+Execute `./cert-setup.sh`
+
 Then import `evilginx/config/crt/ca.crt` as trusted root CA into your browser
 
 ### Start evilginx
@@ -25,8 +29,15 @@ docker build --tag evilginx . && docker run -p 443:443 -it evilginx
 ```
 
 ### Start server
-Start dockerized server which is responsible to relay the webauthn requests via CTAP 
-(through server "cable.ua5v.com", "cable.auth.com") to the authenticator
+Start server which is responsible to relay the webauthn requests via CTAP (through server "cable.ua5v.com", "cable.auth.com") to the authenticator
+
+via cli
+```
+cd server
+cargo run
+```
+
+or dockerized
 ```
 cd server
 docker build --tag fido-qr-server .
@@ -34,13 +45,12 @@ docker run -p 4444:4444 -e RUST_BACKTRACE=full fido-qr-server
 ```
 
 ### Start beacon
-
+Start an application which is responsible to send all discovered BLE advertisements to the server
 ```
 cd beacon
-go run ./
+go run ./ start
 ```
 
-### Open Phishing Urls
+### Open Phishing Url
 * https://login.my-phishing-site.com/DZwkbKWF
-* https://my-phishing-site.com/webauthn
 
