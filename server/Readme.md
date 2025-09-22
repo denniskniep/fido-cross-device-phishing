@@ -1,10 +1,12 @@
 ## CLI
 
 ```
-Usage: server [OPTIONS]
+Usage: server [OPTIONS] --username <USERNAME> --password <PASSWORD>
 
 Options:
-  -a, --address <ADDRESS>              [default: 0.0.0.0:4444]
+  -a, --address <ADDRESS>              [default: 127.0.0.1:4444]
+  -u, --username <USERNAME>            [env: SERVER_USERNAME=]
+  -p, --password <PASSWORD>            [env: SERVER_PASSWORD=]
       --tls-cert-path <TLS_CERT_PATH>  [default: ./crt/cert.pem]
       --tls-key-path <TLS_KEY_PATH>    [default: ./crt/key.pem]
   -d, --disable-tls                    

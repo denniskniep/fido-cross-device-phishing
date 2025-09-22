@@ -11,21 +11,27 @@ pub async fn send(
     credentials: AuthBasic,
     Json(payload): Json<Advertisement>,
 ) -> StatusCode {
-    // TODO: Auth as middleware!
-    if(!check_beacon_auth(credentials)){
-        return StatusCode::UNAUTHORIZED
+
+    let username = state.args.username.clone();
+    let password = state.args.password.clone();
+
+    if(username != "" && password != "") {
+        if(!check_beacon_auth(username, password, credentials)){
+            return StatusCode::UNAUTHORIZED
+        }
     }
+
     let mut advertisements: tokio::sync::MutexGuard<'_, Vec<Advertisement>> = state.advertisements.lock().await;
     advertisements.push(payload);
     debug!("received advertisements: {:?}.", advertisements);
     StatusCode::CREATED
 }
 
-fn check_beacon_auth(AuthBasic((id, password)): AuthBasic) -> bool {
-    if(id == "beacon"){
-        return match password {
+fn check_beacon_auth(username : String, password : String, AuthBasic((providedUser, providedPassword)): AuthBasic) -> bool {
+    if(username == providedUser){
+        return match providedPassword {
             None => false,
-            Some(password) => password == "123456"
+            Some(pw) => pw == password
         }
     }
     false

@@ -16,28 +16,40 @@ use tokio::sync::Mutex;
 use crate::handler_fido_auth::FidoAuth;
 use tower_http::cors::{CorsLayer, Any};
 use axum_server::tls_rustls::RustlsConfig;
-use clap::Parser;
+use clap::{arg, Parser};
+use http::StatusCode;
 use tower::ServiceBuilder;
 use tracing::{debug, info, warn, Level};
 #[tokio::main]
 pub async fn main() {
-    let args = Args::parse();
+    let state =  AppState{
+        args: Args::parse(),
+        fido_authentications: Arc::new(Mutex::new(Vec::new())),
+        advertisements: Arc::new(Mutex::new(Vec::new()))
+    };
+
+    let args = state.args.clone();
 
     let server_address: SocketAddr = args.address
         .parse()
         .expect("Unable to parse socket address");
-
-    let state =  AppState::default();
 
     let subscriber = tracing_subscriber::fmt().with_max_level(Level::DEBUG).finish();
 
     tracing::subscriber::set_global_default(subscriber)
         .expect("Unable to set global logger");
 
+    if(args.username != "") {
+       info!("Credentials necessary for sending advertisements (User: {:?})", args.username);
+    }else{
+        warn!("No Credentials necessary for sending advertisements")
+    }
+
     let cors_layer = CorsLayer::new()
         .allow_origin(Any)  // Open access to selected route
         .allow_methods(Any)
         .allow_headers(Any);
+
 
     let app = Router::new()
         .route("/", get(root))
@@ -62,7 +74,7 @@ pub async fn main() {
 
     let addr = SocketAddr::from(server_address);
 
-    if(!args.disable_tls){
+    if !args.disable_tls {
         info!("Start listening for HTTPS on {:?} ", server_address);
         axum_server::bind_rustls(addr, config)
             .serve(app.into_make_service())
@@ -86,14 +98,21 @@ async fn root() -> &'static str {
 struct AppState {
     pub advertisements: Arc<Mutex<Vec<Advertisement>>>,
     pub fido_authentications: Arc<Mutex<Vec<FidoAuth>>>,
+    pub args : Args,
 }
 
-#[derive(Parser, Debug)]
+#[derive(Parser, Debug, Clone, Default)]
 #[command(version, about, long_about = None)]
 struct Args {
 
     #[arg(short, long, default_value_t = String::from("127.0.0.1:4444"))]
     address: String,
+
+    #[arg(short, long, default_value_t = String::from(""), env = "SERVER_USERNAME")]
+    username: String,
+
+    #[arg(short, long, default_value_t = String::from(""), env = "SERVER_PASSWORD")]
+    password: String,
 
     #[arg(long, default_value_t = String::from("./crt/cert.pem"))]
     tls_cert_path: String,

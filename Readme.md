@@ -35,6 +35,10 @@ docker run -p 4444:4444 -e RUST_BACKTRACE=full fido-qr-server
 
 ### Start beacon
 
+```
+cd beacon
+go run ./
+```
 
 ### Open Phishing Urls
 * https://login.my-phishing-site.com/DZwkbKWF
