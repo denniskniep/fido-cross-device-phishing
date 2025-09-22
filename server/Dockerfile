@@ -24,4 +24,4 @@ RUN chmod +x ./server
 
 EXPOSE 4444
 
-CMD ["./server"] 
+CMD ["./server", "-a", "0.0.0.0:4444"] 
